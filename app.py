@@ -389,7 +389,7 @@ una recomendación con IA sobre qué hacer y qué revisar en el proceso.
 {CONFIG['n_prueba']} para la prueba.
 
 ### Equipo
-_Nombre 1_ · _Nombre 2_ · _Nombre 3_ — IA Generativa para la Gestión Industrial, UDD 2026.
+Sebastián Muñoz · Renato Valdés · Miguel González — IA Generativa para la Gestión Industrial, UDD 2026.
 
 Código: [repositorio en GitHub](https://github.com/sebastianignacio5755-coder/fundiscan)
 """)

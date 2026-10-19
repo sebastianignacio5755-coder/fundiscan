@@ -108,9 +108,9 @@ streamlit run app.py                  # abre http://localhost:8501
 
 | Integrante | Rol principal |
 |---|---|
-| _Nombre 1_ | Datos y notebook (secciones 1–4) |
-| _Nombre 2_ | Modelos y métricas (secciones 5–10) |
-| _Nombre 3_ | App, Gemini y publicación |
+| Sebastián Muñoz | Datos y notebook (secciones 1–4) |
+| Renato Valdés | Modelos y métricas (secciones 5–10) |
+| Miguel González | App, Gemini y publicación |
 
 ## 8. Declaración de uso de IA
 
