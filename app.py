@@ -2,7 +2,7 @@
 FundiScan · Inspección visual de piezas de fundición con IA
 Certamen I · IA Generativa para la Gestión Industrial (UDD)
 
-Flujo:  📷 imagen → 🧠 EfficientNet-B0 (clase + confianza) → 📊 resultado visual → 💬 Gemini → ✅ recomendación
+Flujo:   imagen →  EfficientNet-B0 (clase + confianza) →  resultado visual →  Gemini →  recomendación
 
 App hecha con Streamlit y publicada en Streamlit Community Cloud.
 Ejecutar localmente:  streamlit run app.py
@@ -82,13 +82,13 @@ def clasificar(imagen):
 def tarjeta_veredicto(e):
     """HTML con el resultado: color según la clase y aviso si la confianza es baja."""
     if e["baja_confianza"]:
-        estilo, icono, titulo = "dudosa", "⚠️", f"Resultado incierto · probablemente {e['clase']}"
+        estilo, icono, titulo = "dudosa", , f"Resultado incierto · probablemente {e['clase']}"
         accion = "Confianza baja: <b>un inspector debe revisar la pieza</b> antes de liberarla o descartarla."
     elif e["clase"] == POS:
-        estilo, icono, titulo = "defecto", "❌", "Pieza DEFECTUOSA"
+        estilo, icono, titulo = "defecto", , "Pieza DEFECTUOSA"
         accion = "Separar la pieza, identificarla y enviarla a reinspección o a refusión."
     else:
-        estilo, icono, titulo = "ok", "✅", "Pieza CONFORME"
+        estilo, icono, titulo = "ok", , "Pieza CONFORME"
         accion = "Puede continuar a la siguiente etapa (embalaje o mecanizado)."
     return f"""
     <div class="veredicto {estilo}">
@@ -167,7 +167,7 @@ def recomendacion_respaldo(e):
 def recomendar(estado):
     clave = leer_secreto("GEMINI_API_KEY")
     if not clave:
-        return ("> ⚠️ No hay clave `GEMINI_API_KEY` configurada; se muestra la recomendación de respaldo.\n\n"
+        return (">  No hay clave `GEMINI_API_KEY` configurada; se muestra la recomendación de respaldo.\n\n"
                 + recomendacion_respaldo(estado))
     modelo_extra = leer_secreto("GEMINI_MODEL")          # opcional: fijar otro modelo desde los Secrets
     modelos = ([modelo_extra] if modelo_extra else []) + MODELOS_GEMINI
@@ -194,7 +194,7 @@ def recomendar(estado):
         raise RuntimeError(ultimo_error or "respuesta vacía")
     except Exception as err:
         print("Error Gemini:", err)                    # queda en los registros de la app para diagnosticar
-        return (f"> ⚠️ No se pudo conectar con Gemini ({str(err)[:120]}). "
+        return (f">  No se pudo conectar con Gemini ({str(err)[:120]}). "
                 "Se muestra la recomendación de respaldo.\n\n" + recomendacion_respaldo(estado))
 
 
@@ -245,7 +245,7 @@ ICONO = """<svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidd
         stroke="#f8fafc" stroke-width="3.5" stroke-linecap="round"/>
 </svg>"""
 
-AVISO = f"""<div class="aviso">🎓 <b>Prototipo educativo</b> (Certamen I, UDD). No reemplaza la inspección de calidad:
+AVISO = f"""<div class="aviso"> <b>Prototipo educativo</b> (Certamen I, UDD). No reemplaza la inspección de calidad:
 si la confianza es menor a {CONFIANZA_MINIMA:.0%} la pieza debe revisarla una persona. Entrenado solo con fotos de
 impulsores de una planta, con una cámara y una iluminación; con otras piezas o fotos el resultado no es confiable.</div>"""
 
@@ -254,14 +254,14 @@ def html_desempeno():
     m, cm = METRICAS, CONFIG["matriz_confusion"]
     tarjetas = "".join(
         f'<div class="tarjeta"><div class="valor">{v:.1%}</div><div class="nombre">{n}</div></div>'
-        for n, v in [("Accuracy", m["accuracy"]), ("Recall piezas defectuosas ⭐", m["recall_defectuosa"]),
+        for n, v in [("Accuracy", m["accuracy"]), ("Recall piezas defectuosas ", m["recall_defectuosa"]),
                      ("Precisión piezas defectuosas", m["precision_defectuosa"]),
                      ("Accuracy balanceada", m["accuracy_balanceada"])])
     i_ok = 1 - I_POS
     matriz = f"""<div class="tabla-scroll"><table class="cm">
       <tr><th></th><th>Predice conforme</th><th>Predice defectuosa</th></tr>
       <tr><th>Real conforme</th><td class="bien">{cm[i_ok][i_ok]}</td><td>{cm[i_ok][I_POS]} <small>(falsa alarma)</small></td></tr>
-      <tr><th>Real defectuosa</th><td class="malo">{cm[I_POS][i_ok]} <small>(se escapa 🔴)</small></td><td class="bien">{cm[I_POS][I_POS]}</td></tr>
+      <tr><th>Real defectuosa</th><td class="malo">{cm[I_POS][i_ok]} <small>(se escapa )</small></td><td class="bien">{cm[I_POS][I_POS]}</td></tr>
     </table></div>"""
     return f'<div class="tarjetas">{tarjetas}</div><h4>Matriz de confusión ({CONFIG["n_prueba"]} piezas de prueba)</h4>{matriz}'
 
@@ -285,7 +285,7 @@ st.markdown(f"""<div class="cabecera">{ICONO}
 </div>""", unsafe_allow_html=True)
 
 with st.sidebar:                               # barra lateral: resumen y ayuda
-    st.markdown("### ⚙️ FundiScan")
+    st.markdown("###  FundiScan")
     st.caption("Ayuda para el inspector de calidad al final de la línea de fundición.")
     st.metric("Accuracy en prueba", f"{METRICAS['accuracy']:.1%}")
     st.metric("Piezas defectuosas detectadas (recall)", f"{METRICAS['recall_defectuosa']:.1%}")
@@ -295,21 +295,21 @@ with st.sidebar:                               # barra lateral: resumen y ayuda
     st.markdown("**Cómo usarla**\n1. Elige un ejemplo, sube una foto o usa la cámara.\n"
                 "2. Revisa el veredicto y las probabilidades.\n3. Pide la recomendación con IA.")
 
-tab_insp, tab_desemp, tab_acerca = st.tabs(["🔍 Inspección", "📊 Desempeño", "ℹ️ Acerca"])
+tab_insp, tab_desemp, tab_acerca = st.tabs([" Inspección", " Desempeño", " Acerca"])
 
 # ── Pestaña 1: inspección ──────────────────────────────────────────────────
 with tab_insp:
     col_img, col_res = st.columns([5, 6], gap="large")
 
     with col_img:
-        fuente = st.radio("¿Cómo quieres cargar la pieza?", ["🧪 Ejemplo", "📁 Subir foto", "📷 Cámara"],
+        fuente = st.radio("¿Cómo quieres cargar la pieza?", [" Ejemplo", " Subir foto", " Cámara"],
                           horizontal=True)
         imagen, nombre_img = None, None
-        if fuente == "📁 Subir foto":
+        if fuente == " Subir foto":
             archivo = st.file_uploader("Foto frontal de la pieza", type=["jpg", "jpeg", "png"])
             if archivo:
                 imagen, nombre_img = Image.open(archivo), archivo.name
-        elif fuente == "📷 Cámara":
+        elif fuente == " Cámara":
             foto = st.camera_input("Toma una foto frontal de la pieza")
             if foto:
                 imagen, nombre_img = Image.open(foto), "foto de cámara"
@@ -324,7 +324,7 @@ with tab_insp:
 
     with col_res:
         if imagen is None:
-            st.info("👈 Carga una foto de la pieza para inspeccionarla.")
+            st.info(" Carga una foto de la pieza para inspeccionarla.")
         else:
             resultado = clasificar(imagen)
             st.markdown(tarjeta_veredicto(resultado), unsafe_allow_html=True)
@@ -335,13 +335,13 @@ with tab_insp:
                 st.progress(p, text=f"{NOMBRE_VISIBLE[clase]}: {p:.1%}")
             st.caption(f"La **confianza** es la seguridad del modelo en *esta foto*. El desempeño general del modelo "
                        f"(accuracy **{METRICAS['accuracy']:.1%}** en {CONFIG['n_prueba']} piezas de prueba) "
-                       f"está en la pestaña 📊.")
+                       f"está en la pestaña .")
 
             # la recomendación se guarda por foto: si cambia la imagen, se borra
             clave_img = hashlib.md5(imagen.tobytes()).hexdigest()
             if st.session_state.get("rec_img") != clave_img:
                 st.session_state["rec_img"], st.session_state["rec"] = clave_img, None
-            if st.button("💬 Generar recomendación con IA (Gemini)", type="primary", width="stretch"):
+            if st.button(" Generar recomendación con IA (Gemini)", type="primary", width="stretch"):
                 with st.spinner("Consultando a Gemini…"):
                     st.session_state["rec"] = recomendar(resultado)
             if st.session_state.get("rec"):
