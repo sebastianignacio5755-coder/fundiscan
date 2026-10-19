@@ -1,4 +1,4 @@
-# ⚙️ FundiScan · Inspección visual de piezas de fundición con IA
+#  FundiScan · Inspección visual de piezas de fundición con IA
 
 > **Certamen I** · IA Generativa para la Gestión Industrial · Universidad del Desarrollo · 2026
 > App web que clasifica la foto de un impulsor de fundición como **conforme** o **defectuoso** y genera una recomendación para el inspector con IA generativa.
