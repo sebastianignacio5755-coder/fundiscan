@@ -28,6 +28,7 @@ En una fundición, al solidificar el metal pueden aparecer **poros, sopladuras, 
 |---|---|
 | Dataset | *Casting product image data for quality inspection*. R. Dabhi, Pilot Technocast (Rajkot, India), 2020 |
 | Fuente | [Kaggle](https://www.kaggle.com/datasets/ravirajsinh45/real-life-industrial-dataset-of-casting-product) (no se sube al repositorio) |
+| Licencia | CC BY-NC-ND 4.0 (uso no comercial con atribución) |
 | Clases | `conforme` (ok_front) · `defectuosa` (def_front) |
 | Imágenes | 7.348 fotos de 300×300 px en escala de grises |
 | División | train 85 % / val 15 % del *train* original (estratificado, semilla 42) · test = *test* original (715) |
@@ -117,7 +118,6 @@ streamlit run app.py                  # abre http://localhost:8501
 |---|---|
 | Claude (Anthropic) | Estructura inicial del notebook y de `app.py`, redacción de la documentación y del guion de la exposición |
 | Google Gemini (API) | Genera las recomendaciones dentro de la app |
-| _Agregar otras (ChatGPT, Copilot, etc.)_ | |
 
 Adaptamos el código a nuestro problema (tres enfoques comparados, umbral elegido por costo en validación, interfaz con identidad industrial y recomendación de respaldo). Ejecutamos el notebook y verificamos los resultados. Todos los integrantes revisamos y podemos explicar cada parte del código.
 
