@@ -54,8 +54,9 @@ Mostrar la matriz de confusión y señalar la casilla **real defectuosa / predic
 - La función `evaluar()` es la misma para los tres modelos → comparación justa.
 
 **app.py (C):**
+- `cargar_modelo()` usa `@st.cache_resource`: el modelo se carga una sola vez, no en cada clic.
 - `clasificar()`: aplica las mismas transformaciones que el notebook → `softmax` → aplica el **umbral** → calcula la confianza.
-- `recomendar()`: lee la clave desde `os.environ["GEMINI_API_KEY"]` (secret del Space) y envía **solo texto** a Gemini con `INSTRUCCIONES` (prompt responsable). Si falla, muestra una recomendación de respaldo.
+- `recomendar()`: lee la clave desde `st.secrets["GEMINI_API_KEY"]` (Secrets de Streamlit Cloud) y envía **solo texto** a Gemini con `INSTRUCCIONES` (prompt responsable). Si falla, muestra una recomendación de respaldo.
 
 ## 6. Cierre (A · 0:30)
 > "Aprendimos que un modelo general no basta: hay que adaptarlo con datos del dominio, y que la accuracy no es lo importante, sino cuántas piezas malas se escapan. El principal riesgo es que solo conoce una pieza y una cámara. Como mejora, validaríamos con fotos de otra línea y agregaríamos Grad-CAM para mostrar dónde está el defecto."
@@ -89,7 +90,7 @@ El modelo igual responde conforme o defectuosa, porque no tiene la opción "no e
 No. Solo se envía texto: clase, confianza, probabilidad de defecto y métricas del modelo.
 
 **¿Dónde está la clave API?**
-En *Settings → Variables and secrets* del Space, como secret `GEMINI_API_KEY`. El código la lee con `os.environ`. No está en GitHub.
+En *Settings → Secrets* de la app en Streamlit Community Cloud, como `GEMINI_API_KEY`. El código la lee con `st.secrets` (o `os.environ` en local). No está en GitHub.
 
 **¿Qué hace el prompt para ser responsable?**
 Limita el tema a la calidad en fundición, prohíbe inventar datos (las causas son "posibles"), obliga a pedir revisión humana con confianza menor a 85 % y recuerda que es un prototipo.

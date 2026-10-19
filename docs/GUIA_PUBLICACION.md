@@ -1,6 +1,6 @@
 # 🚀 Guía paso a paso: del notebook a la app publicada
 
-Tiempo total aproximado: **1 a 1,5 horas** la primera vez.
+Tiempo total aproximado: **1 a 1,5 horas** la primera vez. (En un PC con Windows también se puede usar `EJECUTAR_TODO.bat`, que entrena y abre la app localmente.)
 
 ## Paso 1 · Entrenar en Colab (≈ 30 min)
 1. Abrir https://colab.research.google.com → *Archivo → Subir notebook* → `notebooks/entrenamiento.ipynb`.
@@ -24,19 +24,23 @@ Tiempo total aproximado: **1 a 1,5 horas** la primera vez.
 1. Entrar a https://aistudio.google.com con una cuenta de Google.
 2. **Get API key → Create API key**. Copiarla y guardarla en un lugar privado.
 
-## Paso 4 · Hugging Face Spaces (≈ 20 min)
-1. Crear una cuenta en https://huggingface.co.
-2. **New → Space** → nombre `fundiscan` → SDK **Gradio** → hardware **CPU basic (free)** → **Public** → *Create Space*.
-3. Pestaña **Files → Add file → Upload files**: subir los **mismos archivos** del repositorio, respetando las carpetas. El `README.md` ya trae el encabezado que el Space necesita (`sdk: gradio`, `app_file: app.py`).
-4. **Settings → Variables and secrets → New secret**: nombre `GEMINI_API_KEY`, valor = la clave del paso 3.
-5. Esperar a que el estado pase de *Building* a **Running** (3 a 8 minutos). Si aparece *Runtime error*, revisar la pestaña **Logs**.
-6. Copiar el link `https://huggingface.co/spaces/USUARIO/fundiscan` y pegarlo en el README de GitHub.
+## Paso 4 · Streamlit Community Cloud (≈ 15 min)
+> Usamos Streamlit Cloud porque Hugging Face ahora cobra por los Spaces de Gradio. Streamlit está permitido en la pauta y es gratis.
+1. Entrar a https://share.streamlit.io → **Continue with GitHub** (con la cuenta dueña del repositorio).
+2. **Create app → Deploy a public app from GitHub** → repositorio `fundiscan`, rama `main`, archivo `app.py`.
+3. En **App URL** escribir `fundiscan` (queda `https://fundiscan.streamlit.app`).
+4. **Advanced settings**: Python **3.12** y en **Secrets** pegar (con la clave del paso 3):
+   ```toml
+   GEMINI_API_KEY = "pegar-aquí-la-clave"
+   ```
+5. **Deploy**. La primera vez demora 5 a 10 minutos (instala PyTorch).
+6. Para cambiar la clave después: en la app, menú **⋮ → Settings → Secrets**.
 
 ## Paso 5 · Probar (≈ 10 min)
 - [ ] Abrir el link **desde un celular** o desde otro computador.
-- [ ] Clic en un ejemplo → se ve el veredicto, la confianza y las barras.
+- [ ] Elegir un ejemplo → se ve el veredicto, la confianza y las barras.
 - [ ] Botón **Generar recomendación** → responde Gemini y abajo aparece "Generado por gemini-…".
-  - Si dice "recomendación de respaldo", la clave no se cargó: revisar el nombre exacto del secret y reiniciar el Space (*Settings → Restart*).
+  - Si dice "recomendación de respaldo", la clave no se cargó: revisar el nombre exacto del secret y reiniciar la app (*⋮ → Reboot app*).
 - [ ] Probar el ejemplo **"dudosa"**: debería salir el aviso ámbar de revisión humana (si su modelo quedó muy seguro, la confianza puede ser alta igual; en ese caso, mostrar el aviso con una foto que no sea de una pieza).
 - [ ] Pestaña 📊: aparecen las métricas reales del notebook.
 - [ ] **Grabar un video corto (1–2 min) de la demo** como respaldo por si falla internet en la exposición.
@@ -45,13 +49,14 @@ Tiempo total aproximado: **1 a 1,5 horas** la primera vez.
 1. Link al dataset + ficha (`docs/FICHA_DATOS.md`).
 2. `notebooks/entrenamiento.ipynb` **ejecutado** + `app.py`.
 3. Link del repositorio público de GitHub.
-4. Link de la app en Hugging Face.
+4. Link de la app: https://fundiscan.streamlit.app
 5. PDF de la presentación.
 
 ## Problemas frecuentes
 | Síntoma | Solución |
 |---|---|
-| `FileNotFoundError: modelo/config.json` en el Space | Faltó subir la carpeta `modelo/`, o quedó dentro de otra carpeta |
-| El Space se queda en *Building* mucho rato | Es normal la primera vez (instala PyTorch). Si pasan más de 15 min, *Settings → Factory rebuild* |
+| `FileNotFoundError: modelo/config.json` en la app | Faltó subir la carpeta `modelo/`, o quedó dentro de otra carpeta |
+| La app se queda en *Your app is in the oven* mucho rato | Es normal la primera vez (instala PyTorch). Si pasan más de 15 min, *⋮ → Reboot app* |
+| La app dice que está dormida (*This app has gone to sleep*) | Las apps gratis se duermen si nadie las usa; presionar *Yes, get this app back up* y esperar ~1 min. **Ábranla unos minutos antes de la exposición.** |
 | `size mismatch` al cargar el modelo | El `.pt` y el `config.json` deben venir del mismo zip |
-| Gemini responde con error de modelo | En *Variables and secrets*, crear la **variable** `GEMINI_MODEL` con un modelo vigente de Google AI Studio (ej. `gemini-3.5-flash-lite`; la lista está en https://ai.google.dev/gemini-api/docs/models) |
+| Gemini responde con error de modelo | En *Secrets*, agregar `GEMINI_MODEL = "..."` con un modelo vigente de Google AI Studio (ej. `gemini-3.5-flash-lite`; la lista está en https://ai.google.dev/gemini-api/docs/models) |
