@@ -1,0 +1,22 @@
+# Claves y secretos: NUNCA se suben
+.env
+*.env
+secrets.toml
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Datos y archivos pesados (el dataset se descarga desde Kaggle)
+datos/
+*.zip
+flagged/
+.gradio/
+
+# Ejecución local en Windows
+.venv/
+logs/
+notebooks/trabajo/
+clave_gemini.txt
