@@ -1,4 +1,4 @@
-# 📄 Ficha de datos · FundiScan
+#  Ficha de datos · FundiScan
 
 ## Origen
 
