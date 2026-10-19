@@ -5,12 +5,12 @@
 
 | | |
 |---|---|
-| 🌐 **App publicada** | https://fundiscan.streamlit.app |
-| 💻 **Repositorio** | https://github.com/sebastianignacio5755-coder/fundiscan |
-| 📒 **Notebook** | [`notebooks/entrenamiento.ipynb`](notebooks/entrenamiento.ipynb) |
-| 📄 **Ficha de datos** | [`docs/FICHA_DATOS.md`](docs/FICHA_DATOS.md) |
+|  **App publicada** | https://fundiscan.streamlit.app |
+|  **Repositorio** | https://github.com/sebastianignacio5755-coder/fundiscan |
+|  **Notebook** | [`notebooks/entrenamiento.ipynb`](notebooks/entrenamiento.ipynb) |
+|  **Ficha de datos** | [`docs/FICHA_DATOS.md`](docs/FICHA_DATOS.md) |
 
-📷 Imagen → 🧠 EfficientNet-B0 (clase + confianza) → 📊 Resultado visual → 💬 Gemini → ✅ Recomendación
+ Imagen →  EfficientNet-B0 (clase + confianza) →  Resultado visual →  Gemini →  Recomendación
 
 ---
 
@@ -48,7 +48,7 @@ Los tres enfoques se evaluaron con **las mismas 715 imágenes de prueba** y las 
 | Enfoque | Librería | Accuracy | Acc. balanceada | Recall defectuosa | Tamaño |
 |---|---|---|---|---|---|
 | A · CLIP sin entrenar (línea base) | Hugging Face | 52,4 % | 62,4 % | 25,2 % | ~600 MB |
-| **B · EfficientNet-B0 (transfer learning)** ✅ | timm | 99,4 % | 99,6 % | 99,1 % | ~16 MB |
+| **B · EfficientNet-B0 (transfer learning)**  | timm | 99,4 % | 99,6 % | 99,1 % | ~16 MB |
 | C · YOLO11n-cls | Ultralytics | 99,7 % | 99,8 % | 99,6 % | ~3 MB |
 
 > Entrenado en Google Colab con GPU T4 (6 épocas). La app muestra estos números en la pestaña 📊.
@@ -59,15 +59,14 @@ Los tres enfoques se evaluaron con **las mismas 715 imágenes de prueba** y las 
 
 ## 4. La app
 
-- 📷 Carga de imagen (archivo o cámara) y 5 ejemplos del conjunto de prueba para probar.
-- 🧠 Veredicto con color (verde, rojo o ámbar), **confianza** y **barras de probabilidad** de ambas clases.
-- 📊 Pestaña de **desempeño** con accuracy, recall, precisión, matriz de confusión y comparación de modelos. Se explica la diferencia entre la *accuracy* del modelo y la *confianza* de cada foto.
-- 💬 Botón de **recomendación con Gemini**. Solo se envía texto (clase, confianza y métricas), nunca la imagen.
-- ⚠️ **Advertencias**: aviso de prototipo educativo y revisión humana obligatoria cuando la confianza es menor a 85 %.
+-  Carga de imagen (archivo o cámara) y 5 ejemplos del conjunto de prueba para probar.
+-  Veredicto con color (verde, rojo o ámbar), **confianza** y **barras de probabilidad** de ambas clases.
+-  Pestaña de **desempeño** con accuracy, recall, precisión, matriz de confusión y comparación de modelos. Se explica la diferencia entre la *accuracy* del modelo y la *confianza* de cada foto.
+-  Botón de **recomendación con Gemini**. Solo se envía texto (clase, confianza y métricas), nunca la imagen.
+-  **Advertencias**: aviso de prototipo educativo y revisión humana obligatoria cuando la confianza es menor a 85 %.
 
 **Prompt responsable** (ver `INSTRUCCIONES` en `app.py`): limita el tema a la calidad en fundición, prohíbe inventar datos (las causas son siempre *posibles*), exige revisión humana con confianza baja, recuerda que es un prototipo y fija un formato breve. Si la API falla o no hay clave, la app muestra una **recomendación de respaldo**, así la demo nunca queda en blanco.
 
-**Clave API:** se lee de los *Secrets* de Streamlit Community Cloud (`GEMINI_API_KEY`) o de una variable de entorno. **No está en el repositorio.**
 
 ## 5. Estructura del repositorio
 
@@ -85,8 +84,6 @@ fundiscan/
 ├── ejemplos/                   ← 5 imágenes de prueba
 └── docs/
     ├── FICHA_DATOS.md
-    ├── GUIA_PUBLICACION.md
-    └── GUION_EXPOSICION.md
 ```
 
 ## 6. Cómo ejecutarla
