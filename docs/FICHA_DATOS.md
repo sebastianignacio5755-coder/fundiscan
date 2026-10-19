@@ -9,7 +9,7 @@
 | Año | 2020 |
 | Enlace | https://www.kaggle.com/datasets/ravirajsinh45/real-life-industrial-dataset-of-casting-product |
 | Cómo se obtuvo | Fotos cenitales (vista superior) de impulsores de bomba sumergible, tomadas con una cámara fija e iluminación estable, en escala de grises y a 300×300 px |
-| Licencia | ✏️ *Copiar la licencia exacta que aparece en la página de Kaggle (sección "License", a la derecha o al final de la página)* |
+| Licencia | **CC BY-NC-ND 4.0** (Attribution-NonCommercial-NoDerivatives 4.0 International), según la página del dataset en Kaggle. Permite usarlo con atribución y sin fines comerciales, como en este trabajo educativo. Solo incluimos 5 imágenes de ejemplo (con su fuente citada) y no redistribuimos el dataset. |
 | Descarga en el notebook | `kagglehub.dataset_download("ravirajsinh45/real-life-industrial-dataset-of-casting-product")` |
 
 ## Clases
