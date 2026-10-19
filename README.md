@@ -1,16 +1,3 @@
----
-title: FundiScan
-emoji: ⚙️
-colorFrom: gray
-colorTo: yellow
-sdk: gradio
-sdk_version: 6.30.0
-app_file: app.py
-python_version: "3.11"
-pinned: false
-short_description: Inspección visual de piezas de fundición con IA
----
-
 # ⚙️ FundiScan · Inspección visual de piezas de fundición con IA
 
 > **Certamen I** · IA Generativa para la Gestión Industrial · Universidad del Desarrollo · 2026
@@ -18,7 +5,7 @@ short_description: Inspección visual de piezas de fundición con IA
 
 | | |
 |---|---|
-| 🌐 **App publicada** | https://huggingface.co/spaces/USUARIO/fundiscan |
+| 🌐 **App publicada** | https://fundiscan.streamlit.app |
 | 💻 **Repositorio** | https://github.com/sebastianignacio5755-coder/fundiscan |
 | 📒 **Notebook** | [`notebooks/entrenamiento.ipynb`](notebooks/entrenamiento.ipynb) |
 | 📄 **Ficha de datos** | [`docs/FICHA_DATOS.md`](docs/FICHA_DATOS.md) |
@@ -59,19 +46,19 @@ Los tres enfoques se evaluaron con **las mismas 715 imágenes de prueba** y las 
 
 | Enfoque | Librería | Accuracy | Acc. balanceada | Recall defectuosa | Tamaño |
 |---|---|---|---|---|---|
-| A · CLIP sin entrenar (línea base) | Hugging Face | __ % | __ % | __ % | ~600 MB |
-| **B · EfficientNet-B0 (transfer learning)** ✅ | timm | __ % | __ % | __ % | ~16 MB |
-| C · YOLO11n-cls | Ultralytics | __ % | __ % | __ % | ~3 MB |
+| A · CLIP sin entrenar (línea base) | Hugging Face | 52,4 % | 62,4 % | 25,2 % | ~600 MB |
+| **B · EfficientNet-B0 (transfer learning)** ✅ | timm | 99,4 % | 99,6 % | 99,1 % | ~16 MB |
+| C · YOLO11n-cls | Ultralytics | 99,7 % | 99,8 % | 99,6 % | ~3 MB |
 
-> ✏️ Completar con los números de la sección 7 del notebook. La app también los muestra en la pestaña 📊.
+> Entrenado en Google Colab con GPU T4 (6 épocas). La app muestra estos números en la pestaña 📊.
 
-**¿Por qué EfficientNet-B0?** Tiene un recall en piezas defectuosas igual o mejor que el de YOLO (✏️ confirmar con sus números), un archivo liviano que cabe en GitHub y solo necesita `torch` y `timm` en la app. CLIP sin entrenar demuestra que un modelo general no sabe de control de calidad: hay que adaptarlo con datos de la planta.
+**¿Por qué EfficientNet-B0?** YOLO quedó levemente arriba (se le escapan 2 de 453 piezas malas; a EfficientNet, 4), pero la diferencia es mínima y, con el umbral ajustado, EfficientNet baja a 3. Lo elegimos porque en la app solo necesita `torch` y `timm`, y controlamos directamente el umbral y las probabilidades. CLIP sin entrenar demuestra que un modelo general no sabe de control de calidad: se le escapan 339 de 453 piezas malas.
 
-**Umbral de decisión:** se eligió en **validación** minimizando el costo `20 × falsos negativos + 1 × falsos positivos`. Métricas finales en prueba con ese umbral: accuracy __ %, recall defectuosa __ %, precisión defectuosa __ %.
+**Umbral de decisión:** se eligió en **validación** minimizando el costo `20 × falsos negativos + 1 × falsos positivos`. El umbral elegido fue **0,1**. Métricas finales en prueba: **accuracy 98,9 %, recall defectuosa 99,3 %, precisión defectuosa 98,9 %** (se escapan 3 de 453 piezas malas y hay 5 falsas alarmas de 262 piezas buenas).
 
 ## 4. La app
 
-- 📷 Carga de imagen (archivo, cámara o portapapeles) y 5 ejemplos clicables del conjunto de prueba.
+- 📷 Carga de imagen (archivo o cámara) y 5 ejemplos del conjunto de prueba para probar.
 - 🧠 Veredicto con color (verde, rojo o ámbar), **confianza** y **barras de probabilidad** de ambas clases.
 - 📊 Pestaña de **desempeño** con accuracy, recall, precisión, matriz de confusión y comparación de modelos. Se explica la diferencia entre la *accuracy* del modelo y la *confianza* de cada foto.
 - 💬 Botón de **recomendación con Gemini**. Solo se envía texto (clase, confianza y métricas), nunca la imagen.
@@ -79,19 +66,20 @@ Los tres enfoques se evaluaron con **las mismas 715 imágenes de prueba** y las 
 
 **Prompt responsable** (ver `INSTRUCCIONES` en `app.py`): limita el tema a la calidad en fundición, prohíbe inventar datos (las causas son siempre *posibles*), exige revisión humana con confianza baja, recuerda que es un prototipo y fija un formato breve. Si la API falla o no hay clave, la app muestra una **recomendación de respaldo**, así la demo nunca queda en blanco.
 
-**Clave API:** se lee de la variable de entorno `GEMINI_API_KEY`, guardada como *secret* del Space. **No está en el repositorio.**
+**Clave API:** se lee de los *Secrets* de Streamlit Community Cloud (`GEMINI_API_KEY`) o de una variable de entorno. **No está en el repositorio.**
 
 ## 5. Estructura del repositorio
 
 ```
 fundiscan/
-├── app.py                      ← app Gradio (clasificación + Gemini)
+├── app.py                      ← app Streamlit (clasificación + Gemini)
 ├── requirements.txt            ← librerías
-├── README.md                   ← este archivo (también es la ficha del Space)
+├── README.md                   ← este archivo
+├── .streamlit/config.toml      ← tema de la app (colores industriales)
 ├── notebooks/
 │   └── entrenamiento.ipynb     ← datos, comparación de 3 modelos, métricas y exportación
 ├── modelo/
-│   ├── efficientnet_b0_fundicion.pt   ← pesos (~16 MB)
+│   ├── efficientnet_b0_fundicion.pt   ← pesos (8 MB, en media precisión)
 │   └── config.json                    ← clases, umbral, métricas en prueba
 ├── ejemplos/                   ← 5 imágenes de prueba
 └── docs/
@@ -102,16 +90,18 @@ fundiscan/
 
 ## 6. Cómo ejecutarla
 
-**En línea:** abrir el link del Space.
+**En línea:** abrir https://fundiscan.streamlit.app
 
 **Localmente:**
 ```bash
 pip install -r requirements.txt
 export GEMINI_API_KEY="tu_clave"      # en Windows: set GEMINI_API_KEY=tu_clave
-python app.py                         # abre http://127.0.0.1:7860
+streamlit run app.py                  # abre http://localhost:8501
 ```
 
 **Reentrenar:** abrir `notebooks/entrenamiento.ipynb` en Google Colab con GPU T4 → *Ejecutar todas* → se descarga `fundiscan_export.zip` con `modelo/` y `ejemplos/`.
+
+> Nota: el notebook exporta los pesos en `float32` (16 MB). Para subirlos por la web los guardamos en media precisión (`float16`, 8 MB); `load_state_dict` los convierte de vuelta y las predicciones no cambian (diferencia < 0,004 en probabilidad).
 
 ## 7. Integrantes
 

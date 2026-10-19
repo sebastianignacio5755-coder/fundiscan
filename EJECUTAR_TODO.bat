@@ -3,7 +3,7 @@ rem ==========================================================================
 rem  FundiScan - Ejecuta todo en Windows (doble clic):
 rem   1) busca Python 3.10-3.13   2) crea el entorno .venv   3) instala librerias
 rem   4) ejecuta el notebook (datos + 3 modelos + metricas + exporta el modelo)
-rem   5) copia el modelo a la app y abre la app en http://127.0.0.1:7860
+rem   5) copia el modelo a la app y abre la app en http://localhost:8501
 rem  El avance queda en logs\estado.txt ; los detalles en logs\*.txt
 rem  Clave de Gemini (opcional): crear clave_gemini.txt con la clave adentro.
 rem ==========================================================================
@@ -48,7 +48,7 @@ where nvidia-smi >nul 2>&1 && set TORCHIDX=--index-url https://download.pytorch.
   echo ERROR instalando PyTorch, ver %LOG% >> logs\estado.txt
   goto :fin
 )
-%VPY% -m pip install timm ultralytics transformers kagglehub "gradio==6.30.0" google-genai pandas scikit-learn matplotlib jupyter nbconvert ipykernel >> %LOG% 2>&1
+%VPY% -m pip install timm ultralytics transformers kagglehub streamlit google-genai pandas scikit-learn matplotlib jupyter nbconvert ipykernel >> %LOG% 2>&1
 if errorlevel 1 (
   echo ERROR instalando librerias, ver %LOG% >> logs\estado.txt
   goto :fin
@@ -78,11 +78,11 @@ echo PASO 4 OK notebook ejecutado y modelo copiado %time% >> logs\estado.txt
 rem ---- 5. App ----------------------------------------------------------------
 :app
 if exist clave_gemini.txt set /p GEMINI_API_KEY=<clave_gemini.txt
-echo PASO 5 app corriendo en http://127.0.0.1:7860 (cerrar esta ventana la detiene) >> logs\estado.txt
+echo PASO 5 app corriendo en http://localhost:8501 (cerrar esta ventana la detiene) >> logs\estado.txt
 echo.
-echo  App FundiScan corriendo en http://127.0.0.1:7860  (cerrar esta ventana la detiene)
-start "" cmd /c "timeout /t 45 >nul & start http://127.0.0.1:7860"
-%VPY% app.py > logs\app.txt 2>&1
+echo  App FundiScan corriendo en http://localhost:8501  (cerrar esta ventana la detiene)
+start "" cmd /c "timeout /t 45 >nul & start http://localhost:8501"
+%VPY% -m streamlit run app.py --server.headless true > logs\app.txt 2>&1
 echo ERROR: la app se detuvo, ver logs\app.txt >> logs\estado.txt
 
 :fin
