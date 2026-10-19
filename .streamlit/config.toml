@@ -1,0 +1,11 @@
+# Tema de FundiScan: gris acero + naranjo de seguridad industrial
+[theme]
+base = "light"
+primaryColor = "#ea580c"
+backgroundColor = "#f8fafc"
+secondaryBackgroundColor = "#e2e8f0"
+textColor = "#0f172a"
+font = "sans serif"
+
+[server]
+maxUploadSize = 10
